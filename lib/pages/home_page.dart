@@ -14,6 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final todoList = ToDo.todoList();
+  final _todoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,7 @@ class _HomePageState extends State<HomePage> {
                           TodoItem(
                             todo: todoo,
                             onTodoChange: _handleTodoChange,
-                            onTodoDelete: _deleteTodoItem,
+                            onTodoDelete: _deleteToDoItem,
                           ),
                       ],
                     ),
@@ -72,6 +73,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                           borderRadius: BorderRadius.circular(10)),
                       child: TextField(
+                        controller: _todoController,
                         decoration: InputDecoration(
                             hintText: 'Add a new todo item',
                             border: InputBorder.none),
@@ -81,7 +83,9 @@ class _HomePageState extends State<HomePage> {
                   Container(
                       margin: EdgeInsets.only(bottom: 20, right: 20),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _addToDoItem(_todoController.text);
+                        },
                         child: Text(
                           '+',
                           style: TextStyle(fontSize: 40),
@@ -107,10 +111,22 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  _deleteTodoItem(String id) {
+  _deleteToDoItem(String id) {
     setState(() {
       todoList.removeWhere((element) => element.id == id);
     });
+  }
+
+  _addToDoItem(String text) {
+    setState(() {
+      todoList.add(
+        ToDo(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          todoText: text,
+        ),
+      );
+    });
+    _todoController.clear();
   }
 
   Widget searchBox() {
