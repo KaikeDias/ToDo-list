@@ -1,7 +1,7 @@
 class ToDo {
   final String id;
   final String todoText;
-  final bool isDone;
+  bool isDone;
 
   ToDo({required this.id, required this.todoText, this.isDone = false});
 
